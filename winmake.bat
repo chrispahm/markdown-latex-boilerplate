@@ -84,7 +84,7 @@ ECHO  *  winmake word  : Builds a docx file to ./build/ folder.
 ECHO  *  winmake pdf-safemode : Same as pdf but ignores template and CSL settings.
 ECHO  *  winmake epub  : Builds a epub file to ./build/ folder
 ECHO  *  winmake html  : Builds a html file to ./build/ folder
-ECHO  *  winmake html  : Builds a standalone html file with embedded images to ./build/ folder
+ECHO  *  winmake htmlstandalone  : Builds a standalone html file with embedded images to ./build/ folder
 ECHO  *  winmake       : Opens up a prompt.
 ECHO.
 goto exit
@@ -128,14 +128,14 @@ goto exit_nopause
 :html
 ECHO ## HTML MODE
 cd source
-pandoc -S --mathjax="http://cdn.mathjax.org/mathjax/latest/MathJax.js" --section-divs -s --biblatex %toc% -N --bibliography=./%REFERENCES% -o ../build/%BUILDNAME%.html -t html --normalize %SECTIONS%
+pandoc %TOC% --mathjax="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" --section-divs -s -N --bibliography=%REFERENCES% --css=../templates/ui-thesis.css --template=../templates/ui-thesis.html --csl=../csl/%CSL%.csl -o ../build/%BUILDNAME%.html -t html %SECTIONS%
 start ../build/%BUILDNAME%.html
 goto exit_nopause
 
 :htmlstandalone
 ECHO ## HTML MODE
 cd source
-pandoc -S --mathjax="http://cdn.mathjax.org/mathjax/latest/MathJax.js" --section-divs -s --biblatex %toc% -N --bibliography=./%REFERENCES% -o ../build/%BUILDNAME%.html -t html --self-contained --normalize %SECTIONS%
+pandoc %TOC% --mathjax="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" --section-divs -s -N --bibliography=%REFERENCES% --self-contained --css=../templates/ui-thesis.css --template=../templates/ui-thesis.html --csl=../csl/%CSL%.csl -o ../build/%BUILDNAME%.html -t html %SECTIONS%
 start ../build/%BUILDNAME%.html
 goto exit_nopause
 

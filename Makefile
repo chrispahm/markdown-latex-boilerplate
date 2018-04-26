@@ -2,7 +2,7 @@
 
 SECTIONS_FILEPATH=_SECTIONS.txt
 BUILDNAME=example
-REFS=references.bib
+REFERENCES=references.bib
 TEMPLATE=template.tex
 # TEMPLATE=ut-thesis.tex
 CSL=elsevier-with-titles
@@ -37,7 +37,6 @@ pdf: pre
 word: pre
 		cd ./source/ && \
 		pandoc $(TOC) -N --bibliography=$(REFERENCES) -o ../build/$(BUILDNAME).docx --csl=../csl/$(CSL).csl $(SECTIONS)
-# --reference-doc=../templates/ui-thesis.docx
 
 pdfsafemode: pre
 		cd ./source/ && \
@@ -50,15 +49,15 @@ latex: pre
 
 html: pre
 		cd ./source/ && \
-		pandoc -S --mathjax="http://cdn.mathjax.org/mathjax/latest/MathJax.js" --section-divs -s --biblatex $(TOC) -N --bibliography=$(REFS) -o ../build/$(BUILDNAME).html -t html --normalize $(SECTIONS)
+		pandoc $(TOC) --mathjax="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" --section-divs -s -N --bibliography=$(REFERENCES) --css=../templates/ui-thesis.css --template=../templates/ui-thesis.html --csl=../csl/$(CSL).csl -o ../build/$(BUILDNAME).html -t html $(SECTIONS)
 
 embed: pre
 		cd ./source/ && \
-		pandoc -S --reference-links --mathjax="http://cdn.mathjax.org/mathjax/latest/MathJax.js" --section-divs -N --bibliography=$(REFS) --csl=../csl/$(CSL).csl -o ../build/$(BUILDNAME).html -t html --normalize $(SECTIONS)
+		pandoc --reference-links --mathjax="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" --section-divs -s -N --bibliography=$(REFERENCES) --css=../templates/ui-thesis.css --template=../templates/ui-thesis.html --csl=../csl/$(CSL).csl -o ../build/$(BUILDNAME).html -t html $(SECTIONS)
 
 epub: pre
 		cd ./source/ && \
-		pandoc -S -s --biblatex $(TOC) -N --bibliography=$(REFS) -o ../build/$(BUILDNAME).epub -t epub --normalize $(SECTIONS)
+		pandoc -S -s --biblatex $(TOC) -N --bibliography=$(REFERENCES) -o ../build/$(BUILDNAME).epub -t epub  $(SECTIONS)
 
 # open files that were rendered
 

@@ -21,9 +21,8 @@ Here is an inline equation of $1+1 = 2$.
 
 Here is an equation.
 
-$$
-O_2 + 4e^{-}_{p} + 8H^{+}_{n} \rightarrow 2H_{2}O + 4H^{+}_{p}
-$$
+
+$O_2 + 4e^{-}_{p} + 8H^{+}_{n} \rightarrow 2H_{2}O + 4H^{+}_{p}$
 
 \clearpage
 

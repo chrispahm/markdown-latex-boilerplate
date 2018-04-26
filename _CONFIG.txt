@@ -3,4 +3,4 @@ BUILDNAME=example
 REFERENCES=references.bib
 TEMPLATE=template.tex
 CSL=ILR
-TOC=
+TOC=--toc
