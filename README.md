@@ -8,7 +8,7 @@ Use this to write a paper in Markdown and render it as PDF.
 
  *   Step 1: edit the template.tex to your liking
  *   Step 2: edit the example.md with your text, update config.txt and sections.txt
- *   Step 3: make pdf (`make pdf` in linux)(`winmake pdf` in windows)
+ *   Step 3: make pdf and word (`make pdf`, `make word` in osx)(`winmake pdf`, `winmake word` in windows)
  *   Step 4: enjoy pdf
 
 **TL;DR: For windows users double-click on `winmake.bat`**
