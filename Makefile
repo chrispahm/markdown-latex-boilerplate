@@ -6,7 +6,7 @@ REFS=references.bib
 TEMPLATE=template.tex
 # TEMPLATE=ut-thesis.tex
 CSL=elsevier-with-titles
-
+TOC=--toc
 
 # Load in new config settings
 include _CONFIG.txt
@@ -32,20 +32,25 @@ clean:
 
 pdf: pre
 		cd ./source/ && \
-		pandoc --toc -N --bibliography=$(REFERENCES) -o ../build/$(BUILDNAME).pdf --csl=../csl/$(CSL).csl --template=../$(TEMPLATE) $(SECTIONS)
+		pandoc $(TOC) -N --bibliography=$(REFERENCES) -o ../build/$(BUILDNAME).pdf --csl=../csl/$(CSL).csl --template=../$(TEMPLATE) $(SECTIONS)
+
+word: pre
+		cd ./source/ && \
+		pandoc $(TOC) -N --bibliography=$(REFERENCES) -o ../build/$(BUILDNAME).docx --csl=../csl/$(CSL).csl $(SECTIONS)
+# --reference-doc=../templates/ui-thesis.docx
 
 pdfsafemode: pre
 		cd ./source/ && \
-		pandoc --toc -N --bibliography=$(REFERENCES) -o ../build/$(BUILDNAME).pdf --csl=../csl/$(CSL).csl $(SECTIONS)
+		pandoc $(TOC) -N --bibliography=$(REFERENCES) -o ../build/$(BUILDNAME).pdf --csl=../csl/$(CSL).csl $(SECTIONS)
 
 latex: pre
 	  ln -s ../figures ./build/
 		cd ./source/ && \
-		pandoc --toc -N --bibliography=$(REFERENCES) -o ../build/$(BUILDNAME).tex --csl=../csl/$(CSL).csl --template=$(TEMPLATE) $(SECTIONS)
+		pandoc $(TOC) -N --bibliography=$(REFERENCES) -o ../build/$(BUILDNAME).tex --csl=../csl/$(CSL).csl --template=$(TEMPLATE) $(SECTIONS)
 
 html: pre
 		cd ./source/ && \
-		pandoc -S --mathjax="http://cdn.mathjax.org/mathjax/latest/MathJax.js" --section-divs -s --biblatex --toc -N --bibliography=$(REFS) -o ../build/$(BUILDNAME).html -t html --normalize $(SECTIONS)
+		pandoc -S --mathjax="http://cdn.mathjax.org/mathjax/latest/MathJax.js" --section-divs -s --biblatex $(TOC) -N --bibliography=$(REFS) -o ../build/$(BUILDNAME).html -t html --normalize $(SECTIONS)
 
 embed: pre
 		cd ./source/ && \
@@ -53,7 +58,7 @@ embed: pre
 
 epub: pre
 		cd ./source/ && \
-		pandoc -S -s --biblatex --toc -N --bibliography=$(REFS) -o ../build/$(BUILDNAME).epub -t epub --normalize $(SECTIONS)
+		pandoc -S -s --biblatex $(TOC) -N --bibliography=$(REFS) -o ../build/$(BUILDNAME).epub -t epub --normalize $(SECTIONS)
 
 # open files that were rendered
 

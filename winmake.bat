@@ -24,6 +24,7 @@ SET BUILDNAME=example
 SET REFERENCES=references.bib
 SET TEMPLATE=template.tex
 SET CSL=elsevier-with-titles
+SET TOC=--toc
 
 REM Set CR+LF as the newline https://en.wikipedia.org/wiki/Newline#Conversion_utilities
 TYPE _CONFIG.txt | MORE /P > _CONFIG.temp.txt
@@ -55,6 +56,7 @@ mkdir build
 REM ECHO Menu settings here
 :choices
 IF "%COMMAND%"=="pdf" goto pdf
+IF "%COMMAND%"=="word" goto word
 IF "%COMMAND%"=="pdf-safemode" goto pdfsafemode
 IF "%COMMAND%"=="epub" goto epub
 IF "%COMMAND%"=="html" goto html
@@ -78,6 +80,7 @@ ECHO.
 ECHO # HELP:
 ECHO  *  winmake clean : Removes the build folder
 ECHO  *  winmake pdf   : Builds a pdf file to ./build/ folder. Requires LaTeX.
+ECHO  *  winmake word  : Builds a docx file to ./build/ folder.
 ECHO  *  winmake pdf-safemode : Same as pdf but ignores template and CSL settings.
 ECHO  *  winmake epub  : Builds a epub file to ./build/ folder
 ECHO  *  winmake html  : Builds a html file to ./build/ folder
@@ -96,36 +99,43 @@ goto exit
 ECHO ## PDF MODE
 REM If something goes wrong as in "Undefined control sequence". It usually imply that there is something wrong with the latex template. Use safemode
 cd source
-pandoc --toc -N --bibliography=./%REFERENCES% -o ../build/%BUILDNAME%.pdf %CSL_SET% --template=../%TEMPLATE% %SECTIONS%
+pandoc %toc% -N --bibliography=./%REFERENCES% -o ../build/%BUILDNAME%.pdf %CSL_SET% --template=../%TEMPLATE% %SECTIONS%
 start ../build/%BUILDNAME%.pdf
+goto exit_nopause
+
+:word
+ECHO ## WORD MODE
+cd source
+pandoc %toc% -N --bibliography=./%REFERENCES% -o ../build/%BUILDNAME%.docx %CSL_SET% %SECTIONS%
+start ../build/%BUILDNAME%.docx
 goto exit_nopause
 
 :pdfsafemode
 ECHO ## PDF SAFEMODE
 REM Same as pdf mode, but without the template. Also removed CSL since people may forget to download a CSL sheet.
 cd source
-pandoc --toc -N --bibliography=./%REFERENCES% -o ../build/%BUILDNAME%.pdf %SECTIONS%
+pandoc %toc% -N --bibliography=./%REFERENCES% -o ../build/%BUILDNAME%.pdf %SECTIONS%
 start ../build/%BUILDNAME%.pdf
 goto exit
 
 :epub
 ECHO ## EPUB MODE
 cd source
-pandoc -S -s --biblatex --toc -N --bibliography=./%REFERENCES% -o ../build/%BUILDNAME%.epub -t epub --normalize %SECTIONS%
+pandoc -S -s --biblatex %toc% -N --bibliography=./%REFERENCES% -o ../build/%BUILDNAME%.epub -t epub --normalize %SECTIONS%
 start ../build/%BUILDNAME%.epub
 goto exit_nopause
 
 :html
 ECHO ## HTML MODE
 cd source
-pandoc -S --mathjax="http://cdn.mathjax.org/mathjax/latest/MathJax.js" --section-divs -s --biblatex --toc -N --bibliography=./%REFERENCES% -o ../build/%BUILDNAME%.html -t html --normalize %SECTIONS%
+pandoc -S --mathjax="http://cdn.mathjax.org/mathjax/latest/MathJax.js" --section-divs -s --biblatex %toc% -N --bibliography=./%REFERENCES% -o ../build/%BUILDNAME%.html -t html --normalize %SECTIONS%
 start ../build/%BUILDNAME%.html
 goto exit_nopause
 
 :htmlstandalone
 ECHO ## HTML MODE
 cd source
-pandoc -S --mathjax="http://cdn.mathjax.org/mathjax/latest/MathJax.js" --section-divs -s --biblatex --toc -N --bibliography=./%REFERENCES% -o ../build/%BUILDNAME%.html -t html --self-contained --normalize %SECTIONS%
+pandoc -S --mathjax="http://cdn.mathjax.org/mathjax/latest/MathJax.js" --section-divs -s --biblatex %toc% -N --bibliography=./%REFERENCES% -o ../build/%BUILDNAME%.html -t html --self-contained --normalize %SECTIONS%
 start ../build/%BUILDNAME%.html
 goto exit_nopause
 
